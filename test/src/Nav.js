@@ -1,6 +1,16 @@
 function Nav() {
   return (
-    <h1>This is a nav</h1>
+    <nav>
+      <img src="little.jpg" />
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/">About</a></li>
+        <li><a href="/">Menu</a></li>
+        <li><a href="/">Reservations</a></li>
+        <li><a href="/">Order Online</a></li>
+        <li><a href="/">Login</a></li>
+      </ul>
+    </nav>
   )
 }
 
