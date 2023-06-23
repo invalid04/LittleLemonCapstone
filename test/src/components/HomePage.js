@@ -13,6 +13,7 @@ function HomePage() {
       <Hero /> 
       <Specials />
       <Testimonials />
+      <Footer />
     </div>
   )
 }
