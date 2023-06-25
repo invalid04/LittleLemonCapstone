@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import './BookingForm.css'
 
 export default function BookingForm(props) {
 
@@ -12,6 +13,7 @@ export default function BookingForm(props) {
   const [occasion, setOccasion] = useState('');
   const [preferences, setPreferences] = useState('');
   const [comments, setComments] = useState('')
+  const [formValid, setFormValid] = useState(false)
 
   const [finalTime, setFinalTime] = useState(
     props.availableTimes.map((times) => <option>{times}</option>)
@@ -20,9 +22,27 @@ export default function BookingForm(props) {
   function handleDateChange(e) {
     setDate(e.target.value);
     var stringify = e.target.value;
-    const date = new Date(stringify);
-    props.updateTimes(date);
-    setFinalTime(props.availableTimes.map((times) => <option>{times}</option>))
+    const selectedDate = new Date(stringify);
+    props.updateTimes(selectedDate);
+    setFinalTime(props.availableTimes.map((times) => <option key={times}>{times}</option>))
+    validateForm(); 
+  }
+
+  function validateForm() {
+    const inputs = [firstName, lastName, email, phone, date];
+    const isFormValid = inputs.every(input => input.trim() !== '');
+    setFormValid(isFormValid);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (formValid) {
+      console.log('Form submitted!');
+      const navigate = useNavigate();
+      navigate('/confirmation');
+    } else {
+      console.log('Form is invalid. Please fill in all required fields.');
+    }
   }
   
   return (
@@ -37,7 +57,8 @@ export default function BookingForm(props) {
           minLength={2}
           maxLength={15}
           value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          className="firstNameInput"
+          onChange={(e) => {setFirstName(e.target.value); validateForm()}}
           >
         </input>
       </div>
@@ -51,7 +72,8 @@ export default function BookingForm(props) {
           minLength={2}
           maxLength={15}
           value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          onChange={(e) => {setLastName(e.target.value); validateForm()}}
+          className="lastNameInput"
           >
         </input>
       </div>
@@ -65,7 +87,8 @@ export default function BookingForm(props) {
           minLength={2}
           maxLength={30}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          className="emailInput"
+          onChange={(e) => {setEmail(e.target.value); validateForm()}}
           >
         </input>
       </div>
@@ -79,7 +102,8 @@ export default function BookingForm(props) {
           minLength={10}
           maxLength={20}
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          className="phoneInput"
+          onChange={(e) => {setPhone(e.target.value); validateForm()}}
           >
         </input>
       </div>
@@ -92,6 +116,7 @@ export default function BookingForm(props) {
           required
           min={1}
           max={15}
+          className="numberInput"
           onChange={(e) => setPeople(e.target.value)}
           >
         </input>
@@ -103,13 +128,14 @@ export default function BookingForm(props) {
           id="date"
           required
           value={date}
+          className="dateInput"
           onChange={handleDateChange}
           >
         </input>
       </div>
       <div className="inputField">
         <label htmlFor="time">Select Time</label>
-        <select id="time" required>
+        <select id="time" required className="timeInput">
           {finalTime}
         </select>
       </div>
@@ -118,6 +144,7 @@ export default function BookingForm(props) {
         <select
           id="occasion"
           value={occasion}
+          className="occasionInput"
           onChange={(e) => setOccasion(e.target.value)}
           >
           <option>None</option>
@@ -132,6 +159,7 @@ export default function BookingForm(props) {
         <select
           id="preferences"
           value={preferences}
+          className="preferencesInput"
           onChange={(e) => setPreferences(e.target.value)}
           >
           <option>None</option>
@@ -146,12 +174,13 @@ export default function BookingForm(props) {
           rows={8}
           cols={50}
           placeholder="comments"
+          className="commentsInput"
           onChange={(e) => setComments(e.target.value)}
           ></textarea>
       </div>
-      <Link className="formButton" to="/confirmation">Book Table</Link>
+      <Link to="/confirmation" className="formButton" disabled={!formValid}>
+        Book Table
+      </Link>
     </form>
   )
 } 
-
-
