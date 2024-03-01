@@ -1,7 +1,9 @@
-function Main() {
+import React from 'react'
+
+export default function Main() {
   return (
-    <h1>This is a main</h1>
+    <div>
+      this is a main
+    </div>
   )
 }
-
-export default Main

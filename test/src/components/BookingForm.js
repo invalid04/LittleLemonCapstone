@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom'
 import './BookingForm.css'
 
 export default function BookingForm(props) {
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -12,11 +11,13 @@ export default function BookingForm(props) {
   const [date, setDate] = useState('');
   const [occasion, setOccasion] = useState('');
   const [preferences, setPreferences] = useState('');
-  const [comments, setComments] = useState('')
-  const [formValid, setFormValid] = useState(false)
+  const [comments, setComments] = useState('');
+  const [formValid, setFormValid] = useState(false);
+
+  const navigate = useNavigate(); // Moved useNavigate to the top level of the component
 
   const [finalTime, setFinalTime] = useState(
-    props.availableTimes.map((times) => <option>{times}</option>)
+    props.availableTimes.map((times) => <option key={times}>{times}</option>)
   );
 
   function handleDateChange(e) {
@@ -24,7 +25,7 @@ export default function BookingForm(props) {
     var stringify = e.target.value;
     const selectedDate = new Date(stringify);
     props.updateTimes(selectedDate);
-    setFinalTime(props.availableTimes.map((times) => <option key={times}>{times}</option>))
+    setFinalTime(props.availableTimes.map((times) => <option key={times}>{times}</option>));
     validateForm(); 
   }
 
@@ -38,8 +39,7 @@ export default function BookingForm(props) {
     e.preventDefault();
     if (formValid) {
       console.log('Form submitted!');
-      const navigate = useNavigate();
-      navigate('/confirmation');
+      navigate('/confirmation'); // Now using navigate here
     } else {
       console.log('Form is invalid. Please fill in all required fields.');
     }
